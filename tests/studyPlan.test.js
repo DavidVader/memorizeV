@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { Library } from '../js/domain/library.js';
 import { orderCards } from '../js/domain/studyOrder.js';
-import { createStudySession, parseLimit, selectCards } from '../js/domain/studyPlan.js';
+import { createStudySession, defaultSettings, parseLimit, planFromSettings, selectCards } from '../js/domain/studyPlan.js';
 
 const cards = [{ question: 'b' }, { question: 'a' }, { question: 'c' }];
 const questions = (list) => list.map((card) => card.question);
@@ -51,4 +51,17 @@ test('creates a session in the chosen order', () => {
   const session = createStudySession(library, { folderIds: [first.id, second.id], limit: null, orderId: 'reverse' });
   assert.equal(session.currentCard.question, '4');
   assert.equal(session.totalCount, 4);
+});
+
+test('default settings study every real folder', () => {
+  const { library } = libraryWithTwoFolders();
+  const plan = planFromSettings(library, defaultSettings());
+  assert.equal(selectCards(library, plan).length, 4);
+});
+
+test('overrides narrow the plan and unknown folders are dropped', () => {
+  const { library, first } = libraryWithTwoFolders();
+  const plan = planFromSettings(library, { folderIds: ['gone'], limitText: '', orderId: 'random' }, { folderIds: [first.id] });
+  assert.deepEqual(plan.folderIds, [first.id]);
+  assert.deepEqual(planFromSettings(library, { folderIds: ['gone'], limitText: '', orderId: 'random' }).folderIds, []);
 });

@@ -1,7 +1,7 @@
 import { folderScreen } from './folderScreen.js';
 import { foldersScreen } from './foldersScreen.js';
 import { studyScreen } from './studyScreen.js';
-import { studySetupScreen } from './studySetupScreen.js';
+import { studySettingsScreen } from './studySettingsScreen.js';
 
 export function startApp(root, library) {
   let route = { name: 'folders' };
@@ -27,7 +27,7 @@ export function startApp(root, library) {
 
 function buildScreen(context, route) {
   if (route.name === 'folder') return folderScreen(context, route.folderId);
-  if (route.name === 'studySetup') return studySetupScreen(context, route);
+  if (route.name === 'studySettings') return studySettingsScreen(context, route);
   if (route.name === 'study') return studyScreen(context, route);
   return foldersScreen(context);
 }

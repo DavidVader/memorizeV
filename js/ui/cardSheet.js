@@ -1,20 +1,20 @@
 import { colorPicker } from './colorPicker.js';
-import { el } from './dom.js';
+import { el, growWithContent } from './dom.js';
 import { openSheet, sheetHeader } from './sheet.js';
 
 export function openCardSheet(context, folderId, existingCard = null) {
   openSheet((close) => {
     let colorId = existingCard?.colorId ?? null;
-    const questionInput = el('textarea', {
+    const questionInput = growWithContent(el('textarea', {
       placeholder: 'Frage / Vokabel',
       rows: 2,
       value: existingCard?.question ?? '',
-    });
-    const answerInput = el('textarea', {
+    }));
+    const answerInput = growWithContent(el('textarea', {
       placeholder: 'Antwort / Übersetzung',
       rows: 2,
       value: existingCard?.answer ?? '',
-    });
+    }));
 
     const save = () => {
       if (!questionInput.value.trim()) return questionInput.focus();

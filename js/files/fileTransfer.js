@@ -1,13 +1,24 @@
 export function pickTextFiles() {
   return new Promise((resolve) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.txt,text/plain';
-    input.multiple = true;
-    input.addEventListener('change', () => resolve([...input.files]));
-    input.addEventListener('cancel', () => resolve([]));
+    const input = createFileInput();
+    const finish = (files) => {
+      input.remove();
+      resolve(files);
+    };
+    input.addEventListener('change', () => finish([...input.files]));
+    input.addEventListener('cancel', () => finish([]));
+    document.body.append(input);
     input.click();
   });
+}
+
+function createFileInput() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.txt,text/plain';
+  input.multiple = true;
+  Object.assign(input.style, { position: 'fixed', opacity: '0', pointerEvents: 'none' });
+  return input;
 }
 
 export function readText(file) {

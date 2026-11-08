@@ -1,6 +1,15 @@
 import { DEFAULT_COLOR_ID } from './palette.js';
 import { newId } from './identity.js';
 
+export const MARKED_FOLDER_ID = 'marked';
+
+const MARKED_FOLDER = Object.freeze({
+  id: MARKED_FOLDER_ID,
+  name: 'Markiert',
+  colorId: 'yellow',
+  isVirtual: true,
+});
+
 export class Library {
   #folders;
   #cards;
@@ -26,18 +35,24 @@ export class Library {
     return [...this.#folders];
   }
 
+  get foldersWithMarked() {
+    return [MARKED_FOLDER, ...this.#folders];
+  }
+
   folder(folderId) {
-    return this.#folders.find((folder) => folder.id === folderId);
+    return folderId === MARKED_FOLDER_ID ? MARKED_FOLDER : this.#findFolder(folderId);
   }
 
   cardsIn(folderId) {
+    if (folderId === MARKED_FOLDER_ID) return this.#cards.filter((card) => card.marked);
     return this.#cards.filter((card) => card.folderId === folderId);
   }
 
   cardsInFolders(folderIds) {
-    return this.#folders
+    const cards = this.foldersWithMarked
       .filter((folder) => folderIds.includes(folder.id))
       .flatMap((folder) => this.cardsIn(folder.id));
+    return [...new Set(cards)];
   }
 
   addFolder({ name, colorId = DEFAULT_COLOR_ID }) {
@@ -80,6 +95,12 @@ export class Library {
     this.#changed();
   }
 
+  toggleMark(cardId) {
+    const card = this.#requireCard(cardId);
+    card.marked = !card.marked;
+    this.#changed();
+  }
+
   removeCard(cardId) {
     this.#cards = this.#cards.filter((card) => card.id !== cardId);
     this.#changed();
@@ -96,11 +117,16 @@ export class Library {
       question: question.trim(),
       answer: answer.trim(),
       colorId,
+      marked: false,
     };
   }
 
+  #findFolder(folderId) {
+    return this.#folders.find((folder) => folder.id === folderId);
+  }
+
   #requireFolder(folderId) {
-    const folder = this.folder(folderId);
+    const folder = this.#findFolder(folderId);
     if (!folder) throw new Error(`Unknown folder: ${folderId}`);
     return folder;
   }

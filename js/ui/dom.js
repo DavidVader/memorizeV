@@ -5,6 +5,16 @@ export function el(tag, props = {}, ...children) {
   return node;
 }
 
+export function growWithContent(textarea) {
+  const resize = () => {
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
+  textarea.addEventListener('input', resize);
+  setTimeout(resize);
+  return textarea;
+}
+
 function applyProp(node, name, value) {
   if (name.startsWith('on')) {
     node.addEventListener(name.slice(2).toLowerCase(), value);

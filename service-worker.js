@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v2';
+const CACHE_NAME = 'memorizev-v3';
 
 const APP_SHELL = [
   './',
@@ -15,18 +15,23 @@ const APP_SHELL = [
   './js/domain/studyOrder.js',
   './js/domain/studyPlan.js',
   './js/domain/studySession.js',
-  './js/ui/studySetupScreen.js',
+  './js/ui/studySettingsScreen.js',
   './js/files/cardTextCodec.js',
   './js/files/fileTransfer.js',
   './js/files/transferActions.js',
   './js/storage/libraryStorage.js',
+  './js/storage/studySettingsStorage.js',
   './js/ui/app.js',
   './js/ui/cardSheet.js',
   './js/ui/colorPicker.js',
   './js/ui/dom.js',
   './js/ui/folderScreen.js',
   './js/ui/folderSheet.js',
+  './js/ui/folderIcon.js',
   './js/ui/foldersScreen.js',
+  './js/ui/studyLauncher.js',
+  './js/ui/markButton.js',
+  './js/ui/textSize.js',
   './js/ui/sheet.js',
   './js/ui/studyScreen.js',
 ];

@@ -1,12 +1,23 @@
 import { DEFAULT_ORDER_ID, orderCards, pickRandom } from './studyOrder.js';
 import { StudySession } from './studySession.js';
 
-export function defaultSetup(folderIds) {
-  return { folderIds: [...folderIds], limitText: '', orderId: DEFAULT_ORDER_ID };
+export function defaultSettings() {
+  return { folderIds: null, limitText: '', orderId: DEFAULT_ORDER_ID };
 }
 
-export function planFromSetup({ folderIds, limitText, orderId }) {
-  return { folderIds, limit: parseLimit(limitText), orderId };
+export function planFromSettings(library, settings, overrides = {}) {
+  const merged = { ...settings, ...overrides };
+  return {
+    folderIds: resolveFolderIds(library, merged.folderIds),
+    limit: parseLimit(merged.limitText),
+    orderId: merged.orderId,
+  };
+}
+
+export function resolveFolderIds(library, folderIds) {
+  if (folderIds === null) return library.folders.map((folder) => folder.id);
+  const knownIds = library.foldersWithMarked.map((folder) => folder.id);
+  return folderIds.filter((id) => knownIds.includes(id));
 }
 
 export function parseLimit(text) {

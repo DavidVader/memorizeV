@@ -63,3 +63,29 @@ test('restores from a snapshot', () => {
   library.addCard(folder.id, { question: 'Hund', answer: 'dog' });
   assert.deepEqual(new Library(library.snapshot()).snapshot(), library.snapshot());
 });
+
+test('marked cards appear in the virtual marked folder and can be unmarked', () => {
+  library.addCards(folder.id, [
+    { question: 'a', answer: 'b' },
+    { question: 'c', answer: 'd' },
+  ]);
+  const [first] = library.cardsIn(folder.id);
+  library.toggleMark(first.id);
+  assert.deepEqual(library.cardsIn('marked').map((card) => card.question), ['a']);
+  library.toggleMark(first.id);
+  assert.equal(library.cardsIn('marked').length, 0);
+});
+
+test('the marked folder is virtual and cannot receive cards', () => {
+  assert.equal(library.folder('marked').isVirtual, true);
+  assert.throws(() => library.addCard('marked', { question: 'a', answer: 'b' }));
+});
+
+test('editing a card keeps its mark, and a card is never studied twice', () => {
+  library.addCard(folder.id, { question: 'a', answer: 'b' });
+  const [card] = library.cardsIn(folder.id);
+  library.toggleMark(card.id);
+  library.editCard(card.id, { question: 'x', answer: 'y' });
+  assert.equal(library.cardsIn('marked').length, 1);
+  assert.equal(library.cardsInFolders([folder.id, 'marked']).length, 1);
+});
