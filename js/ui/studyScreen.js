@@ -55,7 +55,10 @@ function flashcard(card, isAnswerRevealed, reveal) {
       { className: 'flashcard-content' },
       el('p', { className: 'flashcard-question', 'data-hyphenate-overlong': '' }, card.question),
       isAnswerRevealed
-        ? el('p', { className: 'flashcard-answer', 'data-hyphenate-overlong': '' }, card.answer)
+        ? [
+            el('hr', { className: 'flashcard-divider' }),
+            el('p', { className: 'flashcard-answer', 'data-hyphenate-overlong': '' }, card.answer),
+          ]
         : el('p', { className: 'flashcard-hint' }, 'Tippen zum Aufdecken'),
     ),
   );
