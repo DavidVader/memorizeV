@@ -2,7 +2,6 @@ import { hexOf } from '../domain/palette.js';
 import { createStudySession } from '../domain/studyPlan.js';
 import { el } from './dom.js';
 import { markButton } from './markButton.js';
-import { textSizeClass } from './textSize.js';
 
 export function studyScreen(context, route) {
   const { library, go, refresh } = context;
@@ -54,9 +53,9 @@ function flashcard(card, isAnswerRevealed, reveal) {
     el(
       'div',
       { className: 'flashcard-content' },
-      el('p', { className: `flashcard-question ${textSizeClass(card.question)}` }, card.question),
+      el('p', { className: 'flashcard-question' }, card.question),
       isAnswerRevealed
-        ? el('p', { className: `flashcard-answer ${textSizeClass(card.answer)}` }, card.answer)
+        ? el('p', { className: 'flashcard-answer' }, card.answer)
         : el('p', { className: 'flashcard-hint' }, 'Tippen zum Aufdecken'),
     ),
   );

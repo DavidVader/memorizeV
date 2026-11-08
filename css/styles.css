@@ -399,15 +399,13 @@ button:disabled {
   color: var(--accent);
 }
 
-.flashcard-question.text-large { font-size: 28px; }
-.flashcard-question.text-medium { font-size: 22px; }
-.flashcard-question.text-small { font-size: 18px; text-align: left; }
-.flashcard-question.text-tiny { font-size: 16px; text-align: left; }
+.flashcard-question {
+  font-size: 24px;
+}
 
-.flashcard-answer.text-large { font-size: 24px; }
-.flashcard-answer.text-medium { font-size: 20px; }
-.flashcard-answer.text-small { font-size: 17px; text-align: left; }
-.flashcard-answer.text-tiny { font-size: 15px; text-align: left; }
+.flashcard-answer {
+  font-size: 22px;
+}
 
 .flashcard-hint {
   font-size: 14px;
