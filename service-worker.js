@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v4';
+const CACHE_NAME = 'memorizev-v5';
 
 const APP_SHELL = [
   './',
@@ -31,6 +31,7 @@ const APP_SHELL = [
   './js/ui/foldersScreen.js',
   './js/ui/studyLauncher.js',
   './js/ui/markButton.js',
+  './js/ui/overlongWords.js',
   './js/ui/sheet.js',
   './js/ui/studyScreen.js',
 ];

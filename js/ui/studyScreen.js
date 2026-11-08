@@ -53,9 +53,9 @@ function flashcard(card, isAnswerRevealed, reveal) {
     el(
       'div',
       { className: 'flashcard-content' },
-      el('p', { className: 'flashcard-question' }, card.question),
+      el('p', { className: 'flashcard-question', 'data-hyphenate-overlong': '' }, card.question),
       isAnswerRevealed
-        ? el('p', { className: 'flashcard-answer' }, card.answer)
+        ? el('p', { className: 'flashcard-answer', 'data-hyphenate-overlong': '' }, card.answer)
         : el('p', { className: 'flashcard-hint' }, 'Tippen zum Aufdecken'),
     ),
   );

@@ -76,12 +76,13 @@ button:disabled {
 
 .top-bar h1 {
   flex: 1;
+  min-width: 0;
   margin: 0;
   font-size: clamp(20px, 7vw, 28px);
   font-weight: 700;
   line-height: 1.15;
   overflow: hidden;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -141,7 +142,7 @@ button:disabled {
   flex: 1;
   min-width: 0;
   font-weight: 600;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .row-detail,
@@ -182,7 +183,7 @@ button:disabled {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .empty {
@@ -386,8 +387,8 @@ button:disabled {
 .flashcard p {
   margin: 0;
   max-width: 100%;
-  overflow-wrap: anywhere;
-  hyphens: auto;
+  overflow-wrap: break-word;
+  hyphens: manual;
   white-space: pre-wrap;
 }
 

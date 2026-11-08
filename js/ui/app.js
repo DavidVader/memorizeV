@@ -1,5 +1,6 @@
 import { folderScreen } from './folderScreen.js';
 import { foldersScreen } from './foldersScreen.js';
+import { hyphenateOverlongWords } from './overlongWords.js';
 import { studyScreen } from './studyScreen.js';
 import { studySettingsScreen } from './studySettingsScreen.js';
 
@@ -9,6 +10,7 @@ export function startApp(root, library) {
   const render = ({ keepScroll = false } = {}) => {
     const scrollPosition = keepScroll ? window.scrollY : 0;
     root.replaceChildren(buildScreen(context, route));
+    root.querySelectorAll('[data-hyphenate-overlong]').forEach(hyphenateOverlongWords);
     window.scrollTo(0, scrollPosition);
   };
 
