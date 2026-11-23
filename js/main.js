@@ -6,5 +6,13 @@ saveOnEveryChange(library);
 startApp(document.getElementById('app'), library);
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  reloadWhenUpdatedWorkerTakesOver();
+  navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'none' }).catch(() => {});
+}
+
+function reloadWhenUpdatedWorkerTakesOver() {
+  const hadWorker = Boolean(navigator.serviceWorker.controller);
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (hadWorker) location.reload();
+  });
 }

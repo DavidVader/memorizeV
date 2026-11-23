@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v8';
+const CACHE_NAME = 'memorizev-v9';
 
 const APP_SHELL = [
   './',
@@ -66,8 +66,8 @@ async function deleteOutdatedCaches() {
 async function networkFirstWithCacheFallback(request) {
   const cache = await caches.open(CACHE_NAME);
   try {
-    const response = await fetch(request);
-    cache.put(request, response.clone());
+    const response = await fetch(request, { cache: 'no-cache' });
+    if (response.ok) cache.put(request, response.clone());
     return response;
   } catch {
     return (await cache.match(request, { ignoreSearch: true })) ?? Response.error();
