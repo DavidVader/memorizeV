@@ -290,7 +290,8 @@ button:disabled {
   width: 72px;
 }
 
-.sheet label {
+.sheet label,
+.sheet .field {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -313,6 +314,10 @@ button:disabled {
 }
 
 /* ---------- Color picker ---------- */
+
+.field-label {
+  display: block;
+}
 
 .color-picker {
   display: flex;

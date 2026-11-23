@@ -31,7 +31,12 @@ export function openFolderSheet(context, existingFolder = null) {
     return [
       sheetHeader(existingFolder ? 'Ordner bearbeiten' : 'Neuer Ordner', close),
       el('label', {}, 'Name', nameInput),
-      el('label', {}, 'Farbe', colorPicker({ selectedId: colorId, onChange: (id) => (colorId = id) })),
+      el(
+        'div',
+        { className: 'field' },
+        el('span', { className: 'field-label' }, 'Farbe'),
+        colorPicker({ selectedId: colorId, onChange: (id) => (colorId = id) }),
+      ),
       el('button', { className: 'primary-button', onclick: save }, 'Sichern'),
       existingFolder && el('button', { className: 'danger-button', onclick: remove }, 'Ordner löschen'),
     ];

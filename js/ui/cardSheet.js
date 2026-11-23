@@ -37,9 +37,9 @@ export function openCardSheet(context, folderId, existingCard = null) {
       el('label', {}, 'Frage', questionInput),
       el('label', {}, 'Antwort', answerInput),
       el(
-        'label',
-        {},
-        'Farbe',
+        'div',
+        { className: 'field' },
+        el('span', { className: 'field-label' }, 'Farbe'),
         colorPicker({ selectedId: colorId, inheritLabel: 'Wie Ordner', onChange: (id) => (colorId = id) }),
       ),
       el('button', { className: 'primary-button', onclick: save }, 'Sichern'),
