@@ -8,7 +8,7 @@ Einfache, kostenlose Vokabel-Karten-App (PWA) für das iPhone, optimiert für da
 - Symbole für Ordner: Formen und Icons zu Schule, Berufe, Objekte (Standard ist der Kreis). Icons von [Lucide](https://lucide.dev) (ISC-Lizenz)
 - Farben für Ordner und Karten (Karte ohne eigene Farbe übernimmt die Ordnerfarbe); Hauptordner haben einen vollen Farbpunkt, Unterordner nur den Rand
 - Beim Erstellen bekommt jede Karte zufällig 0 bis 3 Hintergrund-Symbole (Position und Größe zufällig, danach fest)
-- Vorlesen: Lautsprecher-Button bei Frage und Antwort (Sprache pro Frage/Antwort in den Lern-Einstellungen, nutzt die Sprachausgabe des Geräts)
+- Vorlesen: Lautsprecher-Button bei Frage und Antwort (Sprache pro Frage/Antwort in den Lern-Einstellungen). Läuft komplett offline mit [eSpeak NG](https://github.com/espeak-ng/espeak-ng) (WebAssembly, GPL-3.0, in `vendor/espeak-ng`)
 - Schlaflernen (Mond-Button): liest die Frage vor, wartet doppelt so lange, liest die Antwort vor, wartet 2 Sekunden und macht endlos mit der nächsten Karte weiter, bis man auf Stoppen tippt. Der Bildschirm bleibt dabei an, wenn das Gerät es erlaubt
 - Lernmodus: Karte aufdecken, "Gewusst" / "Nochmal"
 - Import und Export von `.txt` Dateien (Dateien-App)
@@ -27,5 +27,6 @@ Der Export schreibt `Frage<Tab>Antwort` pro Zeile.
 ## Architektur
 - `js/domain` – reine Logik (Library, StudySession, Palette), keine UI
 - `js/files` – Textformat und Datei-Import/-Export
+- `js/speech` – Sprachausgabe (eSpeak NG), Schlaflernen-Ablauf, Bildschirm wachhalten
 - `js/storage` – Persistenz in localStorage
 - `js/ui` – Bildschirme und Dialoge

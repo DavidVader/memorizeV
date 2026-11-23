@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v11';
+const CACHE_NAME = 'memorizev-v12';
 
 const APP_SHELL = [
   './',
@@ -9,6 +9,8 @@ const APP_SHELL = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './js/main.js',
+  './vendor/espeak-ng/espeak-ng.js',
+  './vendor/espeak-ng/espeak-ng.wasm',
   './js/domain/cardDecoration.js',
   './js/domain/identity.js',
   './js/domain/languages.js',

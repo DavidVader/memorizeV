@@ -1,5 +1,5 @@
 import { createStudySession, planFromSettings } from '../domain/studyPlan.js';
-import { isSpeechSupported } from '../speech/speaker.js';
+import { isSpeechSupported, prepareSpeech } from '../speech/speaker.js';
 import { startSleepSession } from '../speech/sleepSession.js';
 import { loadStudySettings } from '../storage/studySettingsStorage.js';
 
@@ -18,6 +18,7 @@ export function openStudySettings(context, backTo) {
 }
 
 export function startSleepLearning(context, backTo) {
+  prepareSpeech();
   if (!isSpeechSupported()) {
     alert('Dieses Gerät unterstützt keine Sprachausgabe.');
     return;

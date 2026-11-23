@@ -13,6 +13,7 @@ const CONTENT_TYPES = {
   '.webmanifest': 'application/manifest+json',
   '.png': 'image/png',
   '.svg': 'image/svg+xml',
+  '.wasm': 'application/wasm',
 };
 
 const server = createServer(async (request, response) => {
