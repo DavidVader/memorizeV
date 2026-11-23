@@ -128,3 +128,59 @@ test('folders use the circle symbol by default and can change it', () => {
   library.editFolder(folder.id, { name: 'Englisch', colorId: 'red', symbolId: 'triangle' });
   assert.equal(library.folder(folder.id).symbolId, 'triangle');
 });
+
+test('moves a folder into another folder and back to the top level', () => {
+  const other = library.addFolder({ name: 'Mathe' });
+  library.moveFolder(other.id, folder.id);
+  assert.deepEqual(library.childFolders(folder.id).map((entry) => entry.id), [other.id]);
+  library.moveFolder(other.id, null);
+  assert.equal(library.childFolders(folder.id).length, 0);
+  assert.equal(library.childFolders(null).length, 2);
+});
+
+test('reorders folders by moving one before another', () => {
+  const second = library.addFolder({ name: 'Mathe' });
+  const third = library.addFolder({ name: 'Physik' });
+  library.moveFolder(third.id, null, folder.id);
+  assert.deepEqual(library.childFolders(null).map((entry) => entry.id), [third.id, folder.id, second.id]);
+  library.moveFolder(third.id, null);
+  assert.deepEqual(library.childFolders(null).map((entry) => entry.id), [folder.id, second.id, third.id]);
+});
+
+test('a folder cannot be moved into itself or its own subfolder', () => {
+  const child = library.addFolder({ name: 'Verben', parentId: folder.id });
+  assert.equal(library.canMoveFolderInto(folder.id, child.id), false);
+  assert.throws(() => library.moveFolder(folder.id, child.id));
+  assert.throws(() => library.moveFolder(folder.id, folder.id));
+  assert.equal(library.canMoveFolderInto(child.id, folder.id), true);
+});
+
+test('moving a folder keeps its subfolders and cards', () => {
+  const target = library.addFolder({ name: 'Mathe' });
+  const child = library.addFolder({ name: 'Verben', parentId: folder.id });
+  library.addCard(child.id, { question: 'gehen', answer: 'go' });
+  library.moveFolder(folder.id, target.id);
+  assert.equal(library.depthOf(child.id), 2);
+  assert.equal(library.cardsInTree(target.id).length, 1);
+});
+
+test('moves a card to another folder and reorders cards', () => {
+  const other = library.addFolder({ name: 'Mathe' });
+  library.addCards(folder.id, [
+    { question: 'a', answer: '1' },
+    { question: 'b', answer: '2' },
+    { question: 'c', answer: '3' },
+  ]);
+  const [a, , c] = library.cardsIn(folder.id);
+  library.moveCard(c.id, folder.id, a.id);
+  assert.deepEqual(library.cardsIn(folder.id).map((card) => card.question), ['c', 'a', 'b']);
+  library.moveCard(a.id, other.id);
+  assert.deepEqual(library.cardsIn(other.id).map((card) => card.question), ['a']);
+  assert.deepEqual(library.cardsIn(folder.id).map((card) => card.question), ['c', 'b']);
+});
+
+test('cards cannot be moved into the virtual marked folder', () => {
+  library.addCard(folder.id, { question: 'a', answer: '1' });
+  const [card] = library.cardsIn(folder.id);
+  assert.throws(() => library.moveCard(card.id, 'marked'));
+});

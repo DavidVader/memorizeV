@@ -4,6 +4,7 @@ import { openAddItemSheet } from './addItemSheet.js';
 import { openCardSheet } from './cardSheet.js';
 import { el } from './dom.js';
 import { folderList } from './folderList.js';
+import { installDragMoves } from './dragMoves.js';
 import { markButton } from './markButton.js';
 import { openFolderSheet } from './folderSheet.js';
 import { parentRoute } from './routes.js';
@@ -26,7 +27,7 @@ export function folderScreen(context, folderId) {
   const study = () =>
     startStudy(context, { name: 'folder', folderId }, { folderIds: library.folderAndDescendantIds(folderId), limitText: '' });
 
-  return el(
+  const screen = el(
     'main',
     { className: 'screen', vars: { '--accent': hexOf(folder.colorId) } },
     el(
@@ -46,20 +47,27 @@ export function folderScreen(context, folderId) {
       el('button', { className: 'secondary-button', disabled: cards.length === 0, onclick: () => exportFolder(library, folderId) }, 'Export'),
     ),
     subfolders.length > 0 && folderList(library, subfolders, go),
-    cards.length > 0 && cardList(context, cards),
+    cards.length > 0 && cardList(context, cards, isEditable),
     isEmpty && emptyState(isEditable),
     isEditable && el('button', { className: 'fab', ariaLabel: 'Neu erstellen', onclick: () => openAddItemSheet(context, folderId) }, '+'),
   );
+
+  if (isEditable) installDragMoves(screen, library, folderId);
+  return screen;
 }
 
-function cardList(context, cards) {
+function cardList(context, cards, isEditable) {
   return el(
     'ul',
     { className: 'list' },
     cards.map((card) =>
       el(
         'li',
-        { className: 'card-item', vars: { '--accent': hexOf(context.library.colorIdOfCard(card)) } },
+        {
+          className: 'card-item',
+          vars: { '--accent': hexOf(context.library.colorIdOfCard(card)) },
+          ...(isEditable && { 'data-drag-kind': 'card', 'data-drag-id': card.id }),
+        },
         el(
           'button',
           { className: 'row card-row', onclick: () => openCardSheet(context, card.folderId, card) },

@@ -9,7 +9,7 @@ export function folderList(library, folders, go) {
     folders.map((folder) =>
       el(
         'li',
-        {},
+        dragAttributes(folder),
         el(
           'button',
           {
@@ -25,4 +25,10 @@ export function folderList(library, folders, go) {
       ),
     ),
   );
+}
+
+// Der virtuelle Ordner "Markiert" bleibt oben stehen und lässt sich nicht verschieben.
+function dragAttributes(folder) {
+  if (folder.isVirtual) return {};
+  return { 'data-drag-kind': 'folder', 'data-drag-id': folder.id };
 }

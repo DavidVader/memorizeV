@@ -3,6 +3,7 @@ import { STUDY_ORDERS } from '../domain/studyOrder.js';
 import { planFromSettings, selectCards } from '../domain/studyPlan.js';
 import { importFilesAsFolders } from '../files/transferActions.js';
 import { loadStudySettings } from '../storage/studySettingsStorage.js';
+import { installDragMoves } from './dragMoves.js';
 import { el } from './dom.js';
 import { folderList } from './folderList.js';
 import { openFolderSheet } from './folderSheet.js';
@@ -21,7 +22,7 @@ export function foldersScreen(context) {
     if (message) alert(message);
   };
 
-  return el(
+  const screen = el(
     'main',
     { className: 'screen' },
     el(
@@ -33,6 +34,9 @@ export function foldersScreen(context) {
     ),
     rootFolders.length === 0 ? emptyState() : [studyBar(context), folderList(library, [markedFolder, ...rootFolders], context.go)],
   );
+
+  installDragMoves(screen, library, null);
+  return screen;
 }
 
 function studyBar(context) {

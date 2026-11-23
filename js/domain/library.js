@@ -98,6 +98,37 @@ export class Library {
     this.#changed();
   }
 
+  canMoveFolderInto(folderId, targetFolderId) {
+    return !this.folderAndDescendantIds(folderId).includes(targetFolderId);
+  }
+
+  // Verschiebt einen Ordner unter parentId (null = oberste Ebene), vor beforeFolderId oder ans Ende.
+  moveFolder(folderId, parentId = null, beforeFolderId = null) {
+    const folder = this.#requireFolder(folderId);
+    if (parentId !== null) {
+      this.#requireFolder(parentId);
+      if (!this.canMoveFolderInto(folderId, parentId)) throw new Error('A folder cannot be moved into itself');
+    }
+    if (beforeFolderId === folderId) return;
+
+    this.#folders = this.#folders.filter((candidate) => candidate !== folder);
+    folder.parentId = parentId;
+    insertBefore(this.#folders, folder, beforeFolderId);
+    this.#changed();
+  }
+
+  // Verschiebt eine Karte in einen Ordner, vor beforeCardId oder ans Ende.
+  moveCard(cardId, folderId, beforeCardId = null) {
+    const card = this.#requireCard(cardId);
+    this.#requireFolder(folderId);
+    if (beforeCardId === cardId) return;
+
+    this.#cards = this.#cards.filter((candidate) => candidate !== card);
+    card.folderId = folderId;
+    insertBefore(this.#cards, card, beforeCardId);
+    this.#changed();
+  }
+
   removeFolder(folderId) {
     const removedIds = this.folderAndDescendantIds(folderId);
     this.#folders = this.#folders.filter((folder) => !removedIds.includes(folder.id));
@@ -171,4 +202,10 @@ export class Library {
   #changed() {
     this.#listeners.forEach((listener) => listener());
   }
+}
+
+function insertBefore(list, item, beforeId) {
+  const index = beforeId === null ? -1 : list.findIndex((candidate) => candidate.id === beforeId);
+  if (index === -1) list.push(item);
+  else list.splice(index, 0, item);
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v15';
+const CACHE_NAME = 'memorizev-v16';
 const VOICE_CACHE_NAME = 'memorizev-voices';
 
 const APP_SHELL = [
@@ -46,6 +46,8 @@ const APP_SHELL = [
   './js/ui/cardSheet.js',
   './js/ui/colorPicker.js',
   './js/ui/dom.js',
+  './js/ui/dragAndDrop.js',
+  './js/ui/dragMoves.js',
   './js/ui/folderScreen.js',
   './js/ui/folderSheet.js',
   './js/ui/folderIcon.js',
