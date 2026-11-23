@@ -122,3 +122,9 @@ test('cardsInTree includes the cards of all subfolders', () => {
   assert.equal(library.cardsInTree(folder.id).length, 2);
   assert.equal(library.cardsInTree(child.id).length, 1);
 });
+
+test('folders use the circle symbol by default and can change it', () => {
+  assert.equal(library.folder(folder.id).symbolId, 'circle');
+  library.editFolder(folder.id, { name: 'Englisch', colorId: 'red', symbolId: 'triangle' });
+  assert.equal(library.folder(folder.id).symbolId, 'triangle');
+});

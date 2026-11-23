@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v6';
+const CACHE_NAME = 'memorizev-v7';
 
 const APP_SHELL = [
   './',
@@ -15,6 +15,7 @@ const APP_SHELL = [
   './js/domain/studyOrder.js',
   './js/domain/studyPlan.js',
   './js/domain/studySession.js',
+  './js/domain/symbols.js',
   './js/ui/studySettingsScreen.js',
   './js/files/cardTextCodec.js',
   './js/files/fileTransfer.js',
@@ -37,6 +38,9 @@ const APP_SHELL = [
   './js/ui/overlongWords.js',
   './js/ui/sheet.js',
   './js/ui/studyScreen.js',
+  './js/ui/symbolIcon.js',
+  './js/ui/symbolIcons.js',
+  './js/ui/symbolPicker.js',
 ];
 
 self.addEventListener('install', (event) => {

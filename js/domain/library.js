@@ -1,5 +1,6 @@
 import { DEFAULT_COLOR_ID } from './palette.js';
 import { newId } from './identity.js';
+import { DEFAULT_SYMBOL_ID } from './symbols.js';
 
 export const MARKED_FOLDER_ID = 'marked';
 
@@ -78,18 +79,19 @@ export class Library {
     return [...new Set(cards)];
   }
 
-  addFolder({ name, colorId = DEFAULT_COLOR_ID, parentId = null }) {
+  addFolder({ name, colorId = DEFAULT_COLOR_ID, symbolId = DEFAULT_SYMBOL_ID, parentId = null }) {
     if (parentId !== null) this.#requireFolder(parentId);
-    const folder = { id: newId(), name: name.trim(), colorId, parentId };
+    const folder = { id: newId(), name: name.trim(), colorId, symbolId, parentId };
     this.#folders.push(folder);
     this.#changed();
     return folder;
   }
 
-  editFolder(folderId, { name, colorId }) {
+  editFolder(folderId, { name, colorId, symbolId = DEFAULT_SYMBOL_ID }) {
     const folder = this.#requireFolder(folderId);
     folder.name = name.trim();
     folder.colorId = colorId;
+    folder.symbolId = symbolId;
     this.#changed();
   }
 
