@@ -1,6 +1,6 @@
 // code: gespeichert in den Einstellungen; voiceId: Piper-Stimme (siehe js/domain/piperVoices.js).
 export const LANGUAGES = [
-  { code: 'de-DE', name: 'Deutsch', voiceId: 'de_DE-thorsten-medium' },
+  { code: 'de-DE', name: 'Deutsch', voiceId: 'de_DE-karlsson-low' },
   { code: 'en-US', name: 'Englisch (US)', voiceId: 'en_US-lessac-medium' },
   { code: 'en-GB', name: 'Englisch (UK)', voiceId: 'en_GB-alba-medium' },
   { code: 'fr-FR', name: 'Französisch', voiceId: 'fr_FR-siwis-medium' },
