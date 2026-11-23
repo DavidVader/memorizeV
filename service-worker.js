@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v14';
+const CACHE_NAME = 'memorizev-v15';
 const VOICE_CACHE_NAME = 'memorizev-voices';
 
 const APP_SHELL = [
@@ -19,6 +19,7 @@ const APP_SHELL = [
   './js/domain/identity.js',
   './js/domain/languages.js',
   './js/domain/library.js',
+  './js/domain/phonemeIds.js',
   './js/domain/piperVoices.js',
   './js/domain/palette.js',
   './js/domain/sleepLearning.js',

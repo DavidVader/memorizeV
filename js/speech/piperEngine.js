@@ -1,3 +1,4 @@
+import { phonemesToIds } from '../domain/phonemeIds.js';
 import { splitIntoChunks } from '../domain/textChunks.js';
 import { loadVoiceFiles } from './voiceStore.js';
 
@@ -41,7 +42,8 @@ async function synthesizeAll(text, voiceId) {
 }
 
 async function synthesizeChunk(text, { config, session }, { ort }) {
-  const phonemeIds = await phonemize(text, config.espeak.voice);
+  const phonemes = await phonemize(text, config.espeak.voice);
+  const phonemeIds = phonemesToIds(phonemes, config.phoneme_id_map);
   const { noise_scale: noiseScale, length_scale: lengthScale, noise_w: noiseWidth } = config.inference;
   const feeds = {
     input: new ort.Tensor('int64', BigInt64Array.from(phonemeIds, BigInt), [1, phonemeIds.length]),
@@ -58,9 +60,9 @@ function phonemize(text, espeakVoice) {
   return new Promise(async (resolve, reject) => {
     try {
       const { createPiperPhonemize, phonemizerWasm, phonemizerData } = await loadRuntime();
-      let phonemeIds = null;
+      let phonemes = null;
       const module = await createPiperPhonemize({
-        print: (line) => (phonemeIds = JSON.parse(line).phoneme_ids),
+        print: (line) => (phonemes = JSON.parse(line).phonemes),
         printErr: () => {},
         locateFile: (fileName) => `${VENDOR_URL}${fileName}`,
         getPreloadedPackage: () => phonemizerData,
@@ -70,7 +72,7 @@ function phonemize(text, espeakVoice) {
         },
       });
       module.callMain(['-l', espeakVoice, '--input', JSON.stringify([{ text }]), '--espeak_data', '/espeak-ng-data']);
-      if (phonemeIds) resolve(phonemeIds);
+      if (phonemes) resolve(phonemes);
       else reject(new Error('Der Text konnte nicht in Laute umgewandelt werden.'));
     } catch (error) {
       reject(error);
