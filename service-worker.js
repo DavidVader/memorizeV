@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v7';
+const CACHE_NAME = 'memorizev-v8';
 
 const APP_SHELL = [
   './',
@@ -9,6 +9,7 @@ const APP_SHELL = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './js/main.js',
+  './js/domain/cardDecoration.js',
   './js/domain/identity.js',
   './js/domain/library.js',
   './js/domain/palette.js',

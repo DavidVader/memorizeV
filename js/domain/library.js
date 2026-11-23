@@ -1,3 +1,4 @@
+import { createDecorations } from './cardDecoration.js';
 import { DEFAULT_COLOR_ID } from './palette.js';
 import { newId } from './identity.js';
 import { DEFAULT_SYMBOL_ID } from './symbols.js';
@@ -15,8 +16,10 @@ export class Library {
   #folders;
   #cards;
   #listeners = [];
+  #random;
 
-  constructor({ folders = [], cards = [] } = {}) {
+  constructor({ folders = [], cards = [], random = Math.random } = {}) {
+    this.#random = random;
     this.#folders = folders.map((folder) => ({ ...folder }));
     this.#cards = cards.map((card) => ({ ...card }));
   }
@@ -145,6 +148,7 @@ export class Library {
       answer: answer.trim(),
       colorId,
       marked: false,
+      decorations: createDecorations(this.#random),
     };
   }
 

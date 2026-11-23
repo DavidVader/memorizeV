@@ -2,6 +2,7 @@ import { hexOf } from '../domain/palette.js';
 import { createStudySession } from '../domain/studyPlan.js';
 import { el } from './dom.js';
 import { markButton } from './markButton.js';
+import { symbolIcon } from './symbolIcon.js';
 
 export function studyScreen(context, route) {
   const { library, go, refresh } = context;
@@ -50,6 +51,7 @@ function flashcard(card, isAnswerRevealed, reveal) {
   return el(
     'div',
     { className: 'flashcard', role: 'button', tabIndex: 0, onclick: reveal },
+    decorationLayer(card.decorations ?? []),
     el(
       'div',
       { className: 'flashcard-content' },
@@ -60,6 +62,23 @@ function flashcard(card, isAnswerRevealed, reveal) {
             el('p', { className: 'flashcard-answer', 'data-hyphenate-overlong': '' }, card.answer),
           ]
         : el('p', { className: 'flashcard-hint' }, 'Tippen zum Aufdecken'),
+    ),
+  );
+}
+
+function decorationLayer(decorations) {
+  return el(
+    'div',
+    { className: 'flashcard-decorations', ariaHidden: 'true' },
+    decorations.map(({ symbolId, x, y, size, rotation }) =>
+      el(
+        'span',
+        {
+          className: 'flashcard-decoration',
+          vars: { '--x': `${x}%`, '--y': `${y}%`, '--size': `${size}%`, '--rotation': `${rotation}deg` },
+        },
+        symbolIcon(symbolId),
+      ),
     ),
   );
 }

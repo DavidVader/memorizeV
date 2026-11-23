@@ -434,6 +434,32 @@ button:disabled {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   cursor: pointer;
+  position: relative;
+  isolation: isolate;
+}
+
+.flashcard-decorations {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.flashcard-decoration {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(var(--rotation));
+}
+
+.flashcard-decoration .symbol {
+  width: 100%;
+  height: 100%;
 }
 
 .flashcard-content {
