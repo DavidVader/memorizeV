@@ -8,8 +8,8 @@ Einfache, kostenlose Vokabel-Karten-App (PWA) für das iPhone, optimiert für da
 - Symbole für Ordner: Formen und Icons zu Schule, Berufe, Objekte (Standard ist der Kreis). Icons von [Lucide](https://lucide.dev) (ISC-Lizenz)
 - Farben für Ordner und Karten (Karte ohne eigene Farbe übernimmt die Ordnerfarbe); Hauptordner haben einen vollen Farbpunkt, Unterordner nur den Rand
 - Beim Erstellen bekommt jede Karte zufällig 0 bis 3 Hintergrund-Symbole (Position und Größe zufällig, danach fest)
-- Vorlesen: Lautsprecher-Button bei Frage und Antwort (Sprache pro Frage/Antwort in den Lern-Einstellungen). Neuronale Stimmen mit [Piper](https://github.com/rhasspy/piper) (läuft im Browser per WebAssembly). Die Stimme jeder Sprache (ca. 65 MB) wird beim ersten Mal nach Rückfrage geladen und funktioniert danach offline
-- Schlaflernen (Mond-Button): liest die Frage vor, wartet doppelt so lange, liest die Antwort vor, wartet 2 Sekunden und macht endlos mit der nächsten Karte weiter, bis man auf Stoppen tippt. Der Bildschirm bleibt dabei an, wenn das Gerät es erlaubt
+- Vorlesen: Lautsprecher-Button bei Frage und Antwort, sofort über die Sprachausgabe des Geräts (Sprache pro Frage/Antwort in den Lern-Einstellungen)
+- Schlaflernen (Mond-Button): nutzt neuronale Stimmen mit [Piper](https://github.com/rhasspy/piper) (WebAssembly, die Stimme jeder Sprache ca. 65 MB wird beim ersten Mal nach Rückfrage geladen und läuft danach offline). Liest die Frage vor, wartet doppelt so lange, liest die Antwort vor, wartet 2 Sekunden und macht endlos mit der nächsten Karte weiter, bis man auf Stoppen tippt. Der Bildschirm bleibt dabei an, wenn das Gerät es erlaubt
 - Lernmodus: Karte aufdecken, "Gewusst" / "Nochmal"
 - Import und Export von `.txt` Dateien (Dateien-App)
 
@@ -27,6 +27,6 @@ Der Export schreibt `Frage<Tab>Antwort` pro Zeile.
 ## Architektur
 - `js/domain` – reine Logik (Library, StudySession, Palette), keine UI
 - `js/files` – Textformat und Datei-Import/-Export
-- `js/speech` – Sprachausgabe (Piper), Schlaflernen-Ablauf, Bildschirm wachhalten
+- `js/speech` – Sprachausgabe (Gerät und Piper), Schlaflernen-Ablauf, Bildschirm wachhalten
 - `js/storage` – Persistenz in localStorage
 - `js/ui` – Bildschirme und Dialoge

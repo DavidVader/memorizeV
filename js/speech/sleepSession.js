@@ -2,7 +2,7 @@ import { createCardCycler, runSleepLoop } from '../domain/sleepLearning.js';
 import { orderCards } from '../domain/studyOrder.js';
 import { selectCards } from '../domain/studyPlan.js';
 import { wait } from '../domain/timing.js';
-import { speak, stopSpeaking } from './speaker.js';
+import { speak, stopSpeaking } from './piperSpeaker.js';
 import { keepScreenAwake } from './wakeLock.js';
 
 export function startSleepSession({ library, plan, settings, onStep }) {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v13';
+const CACHE_NAME = 'memorizev-v14';
 const VOICE_CACHE_NAME = 'memorizev-voices';
 
 const APP_SHELL = [
@@ -31,7 +31,8 @@ const APP_SHELL = [
   './js/ui/studySettingsScreen.js',
   './js/speech/piperEngine.js',
   './js/speech/sleepSession.js',
-  './js/speech/speaker.js',
+  './js/speech/instantSpeaker.js',
+  './js/speech/piperSpeaker.js',
   './js/speech/voiceStore.js',
   './js/speech/wakeLock.js',
   './js/files/cardTextCodec.js',

@@ -1,4 +1,4 @@
-import { speak } from '../speech/speaker.js';
+import { speak } from '../speech/instantSpeaker.js';
 import { el } from './dom.js';
 import { uiIcon } from './uiIcons.js';
 

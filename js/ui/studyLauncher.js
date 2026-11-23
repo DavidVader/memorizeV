@@ -1,5 +1,5 @@
 import { createStudySession, planFromSettings } from '../domain/studyPlan.js';
-import { isSpeechSupported, prepareSpeech, prepareVoices } from '../speech/speaker.js';
+import { isSpeechSupported, prepareSpeech, prepareVoices } from '../speech/piperSpeaker.js';
 import { startSleepSession } from '../speech/sleepSession.js';
 import { loadStudySettings } from '../storage/studySettingsStorage.js';
 

@@ -1,5 +1,5 @@
 import { APPROXIMATE_VOICE_SIZE_MB } from '../domain/piperVoices.js';
-import { configureSpeech } from '../speech/speaker.js';
+import { configureSpeech } from '../speech/piperSpeaker.js';
 import { el } from './dom.js';
 
 export function installSpeechUi() {
@@ -9,7 +9,7 @@ export function installSpeechUi() {
   configureSpeech({
     confirmDownload: async (languageName) =>
       confirm(
-        `Für die Sprachausgabe „${languageName}“ wird einmalig eine Stimme geladen (ca. ${APPROXIMATE_VOICE_SIZE_MB} MB). ` +
+        `Für das Schlaflernen („${languageName}“) wird einmalig eine Stimme geladen (ca. ${APPROXIMATE_VOICE_SIZE_MB} MB). ` +
           'Danach funktioniert sie offline. Jetzt laden?',
       ),
     onStatus: (message) => {
