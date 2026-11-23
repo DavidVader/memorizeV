@@ -1,8 +1,10 @@
 import { loadLibrary, saveOnEveryChange } from './storage/libraryStorage.js';
 import { startApp } from './ui/app.js';
+import { installSpeechUi } from './ui/speechStatus.js';
 
 const library = loadLibrary();
 saveOnEveryChange(library);
+installSpeechUi();
 startApp(document.getElementById('app'), library);
 
 if ('serviceWorker' in navigator) {

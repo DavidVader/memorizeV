@@ -1,28 +1,49 @@
-import { voiceOf } from '../domain/languages.js';
+import { languageOf } from '../domain/languages.js';
+import { loadVoice, synthesize } from './piperEngine.js';
+import { isVoiceStored } from './voiceStore.js';
 
-// Sprachausgabe mit eSpeak NG (WebAssembly, läuft komplett offline).
-// Der Text wird zu einer WAV-Datei berechnet und über Web Audio abgespielt;
-// die Länge der Aufnahme ist die genaue Sprechdauer.
-const ENGINE_SCRIPT_URL = new URL('../../vendor/espeak-ng/espeak-ng.js', import.meta.url).href;
-const ENGINE_WASM_URL = new URL('../../vendor/espeak-ng/espeak-ng.wasm', import.meta.url).href;
-const INPUT_FILE = 'input.txt';
-const OUTPUT_FILE = 'output.wav';
-const WORDS_PER_MINUTE = 150;
 const FALLBACK_DURATION_MS = 500;
+const PERCENT = 100;
 
 let audioContext = null;
-let enginePromise = null;
 let currentPlayback = null;
 let latestRequestId = 0;
+const readyVoices = new Set();
+
+// Die Oberfläche hängt hier Rückfragen und Statusmeldungen ein.
+let handlers = {
+  confirmDownload: async () => true,
+  onStatus: () => {},
+};
+
+export function configureSpeech(newHandlers) {
+  handlers = { ...handlers, ...newHandlers };
+}
 
 export function isSpeechSupported() {
-  return typeof WebAssembly === 'object' && Boolean(window.AudioContext ?? window.webkitAudioContext);
+  return typeof WebAssembly === 'object' && typeof BigInt64Array === 'function' && Boolean(window.AudioContext ?? window.webkitAudioContext);
 }
 
 // Muss direkt in einem Tipp/Klick aufgerufen werden: iOS erlaubt Ton erst nach einer Nutzer-Aktion.
 export function prepareSpeech() {
-  unlockAudio();
-  loadEngine().catch(() => {});
+  const AudioContextClass = window.AudioContext ?? window.webkitAudioContext;
+  audioContext ??= new AudioContextClass();
+  if (audioContext.state === 'suspended') audioContext.resume();
+}
+
+// Stellt die Stimmen bereit (lädt sie bei Bedarf herunter). Liefert false, wenn der Nutzer ablehnt oder es scheitert.
+export async function prepareVoices(languageCodes) {
+  try {
+    for (const languageCode of new Set(languageCodes)) {
+      if (!(await ensureVoice(languageCode))) return false;
+    }
+    return true;
+  } catch (error) {
+    reportFailure(error);
+    return false;
+  } finally {
+    handlers.onStatus(null);
+  }
 }
 
 // Liest den Text vor und liefert die Sprechdauer in Millisekunden.
@@ -34,13 +55,17 @@ export async function speak(text, language, signal) {
   if (signal?.aborted) return 0;
 
   try {
-    const recording = await synthesize(text, voiceOf(language));
-    const buffer = await audioContext.decodeAudioData(recording.buffer.slice(recording.byteOffset, recording.byteOffset + recording.byteLength));
+    if (!(await ensureVoice(language))) return 0;
+    handlers.onStatus(null);
+    const { samples, sampleRate } = await synthesize(text, languageOf(language).voiceId);
     if (requestId !== latestRequestId || signal?.aborted) return 0;
+
+    const buffer = audioContext.createBuffer(1, samples.length, sampleRate);
+    buffer.copyToChannel(samples, 0);
     await play(buffer, signal);
     return buffer.duration * 1000;
   } catch (error) {
-    console.error('Sprachausgabe fehlgeschlagen', error);
+    reportFailure(error);
     return FALLBACK_DURATION_MS;
   }
 }
@@ -50,10 +75,24 @@ export function stopSpeaking() {
   currentPlayback?.stop();
 }
 
-function unlockAudio() {
-  const AudioContextClass = window.AudioContext ?? window.webkitAudioContext;
-  audioContext ??= new AudioContextClass();
-  if (audioContext.state === 'suspended') audioContext.resume();
+async function ensureVoice(languageCode) {
+  const { voiceId, name } = languageOf(languageCode);
+  if (readyVoices.has(voiceId)) return true;
+
+  const isDownloaded = await isVoiceStored(voiceId);
+  if (!isDownloaded && !(await handlers.confirmDownload(name))) return false;
+
+  handlers.onStatus(isDownloaded ? `Stimme „${name}“ wird vorbereitet …` : `Stimme „${name}“ wird geladen …`);
+  await loadVoice(voiceId, (progress) => {
+    handlers.onStatus(`Stimme „${name}“ wird geladen … ${Math.round(progress * PERCENT)} %`);
+  });
+  readyVoices.add(voiceId);
+  return true;
+}
+
+function reportFailure(error) {
+  console.error('Sprachausgabe fehlgeschlagen', error);
+  handlers.onStatus('Sprachausgabe nicht möglich. Internetverbindung für den ersten Download nötig?');
 }
 
 function play(buffer, signal) {
@@ -82,35 +121,4 @@ function play(buffer, signal) {
     currentPlayback = { stop };
     source.start();
   });
-}
-
-async function synthesize(text, voice) {
-  const { createInstance, wasmModule } = await loadEngine();
-  const instance = await createInstance({
-    arguments: ['-v', voice, '-s', String(WORDS_PER_MINUTE), '-w', OUTPUT_FILE, '-f', INPUT_FILE],
-    preRun: [(engineModule) => engineModule.FS.writeFile(INPUT_FILE, text)],
-    instantiateWasm: (imports, receiveInstance) => {
-      WebAssembly.instantiate(wasmModule, imports).then((instance) => receiveInstance(instance, wasmModule));
-      return {};
-    },
-    print: () => {},
-    printErr: () => {},
-  });
-  return instance.FS.readFile(OUTPUT_FILE);
-}
-
-// Lädt die Engine einmal und übersetzt das WASM nur einmal; jede Ansage nutzt eine frische Instanz.
-function loadEngine() {
-  enginePromise ??= Promise.all([import(ENGINE_SCRIPT_URL), compileWasm()])
-    .then(([engineScript, wasmModule]) => ({ createInstance: engineScript.default, wasmModule }))
-    .catch((error) => {
-      enginePromise = null;
-      throw error;
-    });
-  return enginePromise;
-}
-
-async function compileWasm() {
-  const response = await fetch(ENGINE_WASM_URL);
-  return WebAssembly.compile(await response.arrayBuffer());
 }

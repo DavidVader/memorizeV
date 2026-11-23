@@ -1,5 +1,5 @@
 import { createStudySession, planFromSettings } from '../domain/studyPlan.js';
-import { isSpeechSupported, prepareSpeech } from '../speech/speaker.js';
+import { isSpeechSupported, prepareSpeech, prepareVoices } from '../speech/speaker.js';
 import { startSleepSession } from '../speech/sleepSession.js';
 import { loadStudySettings } from '../storage/studySettingsStorage.js';
 
@@ -17,7 +17,7 @@ export function openStudySettings(context, backTo) {
   context.go({ name: 'studySettings', settings: loadStudySettings(), backTo });
 }
 
-export function startSleepLearning(context, backTo) {
+export async function startSleepLearning(context, backTo) {
   prepareSpeech();
   if (!isSpeechSupported()) {
     alert('Dieses Gerät unterstützt keine Sprachausgabe.');
@@ -29,6 +29,9 @@ export function startSleepLearning(context, backTo) {
     alert('Keine Karten zum Lernen. Prüfe die Lern-Einstellungen (⚙︎).');
     return;
   }
+
+  const voicesReady = await prepareVoices([settings.questionLanguage, settings.answerLanguage]);
+  if (!voicesReady) return;
 
   const route = { name: 'sleep', backTo, step: null, stop: () => {} };
   context.go(route);

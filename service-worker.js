@@ -1,4 +1,5 @@
-const CACHE_NAME = 'memorizev-v12';
+const CACHE_NAME = 'memorizev-v13';
+const VOICE_CACHE_NAME = 'memorizev-voices';
 
 const APP_SHELL = [
   './',
@@ -9,22 +10,29 @@ const APP_SHELL = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './js/main.js',
-  './vendor/espeak-ng/espeak-ng.js',
-  './vendor/espeak-ng/espeak-ng.wasm',
+  './vendor/piper/ort.wasm.min.js',
+  './vendor/piper/ort-wasm-simd.wasm',
+  './vendor/piper/piper-phonemize.js',
+  './vendor/piper/piper_phonemize.wasm',
+  './vendor/piper/piper_phonemize.data',
   './js/domain/cardDecoration.js',
   './js/domain/identity.js',
   './js/domain/languages.js',
   './js/domain/library.js',
+  './js/domain/piperVoices.js',
   './js/domain/palette.js',
   './js/domain/sleepLearning.js',
   './js/domain/studyOrder.js',
   './js/domain/studyPlan.js',
   './js/domain/studySession.js',
   './js/domain/symbols.js',
+  './js/domain/textChunks.js',
   './js/domain/timing.js',
   './js/ui/studySettingsScreen.js',
+  './js/speech/piperEngine.js',
   './js/speech/sleepSession.js',
   './js/speech/speaker.js',
+  './js/speech/voiceStore.js',
   './js/speech/wakeLock.js',
   './js/files/cardTextCodec.js',
   './js/files/fileTransfer.js',
@@ -48,6 +56,7 @@ const APP_SHELL = [
   './js/ui/sheet.js',
   './js/ui/studyScreen.js',
   './js/ui/sleepScreen.js',
+  './js/ui/speechStatus.js',
   './js/ui/speakButton.js',
   './js/ui/symbolIcon.js',
   './js/ui/symbolIcons.js',
@@ -66,12 +75,13 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  if (new URL(event.request.url).origin !== self.location.origin) return;
   event.respondWith(networkFirstWithCacheFallback(event.request));
 });
 
 async function deleteOutdatedCaches() {
   const names = await caches.keys();
-  await Promise.all(names.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name)));
+  await Promise.all(names.filter((name) => name !== CACHE_NAME && name !== VOICE_CACHE_NAME).map((name) => caches.delete(name)));
 }
 
 async function networkFirstWithCacheFallback(request) {
