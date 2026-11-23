@@ -1,6 +1,6 @@
 import { colorPicker } from './colorPicker.js';
 import { el, growWithContent } from './dom.js';
-import { openSheet, sheetHeader } from './sheet.js';
+import { openSheet } from './sheet.js';
 
 export function openCardSheet(context, folderId, existingCard = null) {
   openSheet((close) => {
@@ -32,18 +32,22 @@ export function openCardSheet(context, folderId, existingCard = null) {
     };
 
     setTimeout(() => questionInput.focus());
-    return [
-      sheetHeader(existingCard ? 'Karte bearbeiten' : 'Neue Karte', close),
-      el('label', {}, 'Frage', questionInput),
-      el('label', {}, 'Antwort', answerInput),
-      el(
-        'div',
-        { className: 'field' },
-        el('span', { className: 'field-label' }, 'Farbe'),
-        colorPicker({ selectedId: colorId, inheritLabel: 'Wie Ordner', onChange: (id) => (colorId = id) }),
-      ),
-      el('button', { className: 'primary-button', onclick: save }, 'Sichern'),
-      existingCard && el('button', { className: 'danger-button', onclick: remove }, 'Karte löschen'),
-    ];
+    return {
+      title: existingCard ? 'Karte bearbeiten' : 'Neue Karte',
+      body: [
+        el('label', {}, 'Frage', questionInput),
+        el('label', {}, 'Antwort', answerInput),
+        el(
+          'div',
+          { className: 'field' },
+          el('span', { className: 'field-label' }, 'Farbe'),
+          colorPicker({ selectedId: colorId, inheritLabel: 'Wie Ordner', onChange: (id) => (colorId = id) }),
+        ),
+      ],
+      actions: [
+        el('button', { className: 'primary-button', onclick: save }, 'Sichern'),
+        existingCard && el('button', { className: 'danger-button', onclick: remove }, 'Karte löschen'),
+      ],
+    };
   });
 }

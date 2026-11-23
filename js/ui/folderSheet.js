@@ -4,7 +4,7 @@ import { colorPicker } from './colorPicker.js';
 import { el } from './dom.js';
 import { parentRoute } from './routes.js';
 import { symbolPicker } from './symbolPicker.js';
-import { openSheet, sheetHeader } from './sheet.js';
+import { openSheet } from './sheet.js';
 
 export function openFolderSheet(context, existingFolder = null, parentId = null) {
   openSheet((close) => {
@@ -44,18 +44,22 @@ export function openFolderSheet(context, existingFolder = null, parentId = null)
     };
 
     setTimeout(() => nameInput.focus());
-    return [
-      sheetHeader(existingFolder ? 'Ordner bearbeiten' : 'Neuer Ordner', close),
-      el('label', {}, 'Name', nameInput),
-      el(
-        'div',
-        { className: 'field' },
-        el('span', { className: 'field-label' }, 'Farbe'),
-        colorPicker({ selectedId: colorId, onChange: changeColor }),
-      ),
-      symbolField,
-      el('button', { className: 'primary-button', onclick: save }, 'Sichern'),
-      existingFolder && el('button', { className: 'danger-button', onclick: remove }, 'Ordner löschen'),
-    ];
+    return {
+      title: existingFolder ? 'Ordner bearbeiten' : 'Neuer Ordner',
+      body: [
+        el('label', {}, 'Name', nameInput),
+        el(
+          'div',
+          { className: 'field' },
+          el('span', { className: 'field-label' }, 'Farbe'),
+          colorPicker({ selectedId: colorId, onChange: changeColor }),
+        ),
+        symbolField,
+      ],
+      actions: [
+        el('button', { className: 'primary-button', onclick: save }, 'Sichern'),
+        existingFolder && el('button', { className: 'danger-button', onclick: remove }, 'Ordner löschen'),
+      ],
+    };
   });
 }
