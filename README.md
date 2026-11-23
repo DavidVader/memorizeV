@@ -20,7 +20,7 @@ Der Export schreibt `Frage<Tab>Antwort` pro Zeile.
 
 ## Entwicklung
 - `npm test` startet die Unit-Tests (Node 20+)
-- `npm start` startet einen lokalen Server auf http://localhost:8080
+- `npm start` startet einen lokalen Server auf http://localhost:8080 (Node, kein Python nötig)
 
 ## Architektur
 - `js/domain` – reine Logik (Library, StudySession, Palette), keine UI

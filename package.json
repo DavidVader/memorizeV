@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "python -m http.server 8080",
+    "start": "node scripts/serve.js",
     "test": "node --test"
   }
 }
