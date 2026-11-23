@@ -1,5 +1,5 @@
 import { hexOf } from '../domain/palette.js';
-import { exportFolder, importFilesIntoFolder } from '../files/transferActions.js';
+import { exportFolder, importFilesAsFolders } from '../files/transferActions.js';
 import { openAddItemSheet } from './addItemSheet.js';
 import { openCardSheet } from './cardSheet.js';
 import { el } from './dom.js';
@@ -19,7 +19,7 @@ export function folderScreen(context, folderId) {
   const isEditable = !folder.isVirtual;
 
   const importCards = async () => {
-    const message = await importFilesIntoFolder(library, folderId);
+    const message = await importFilesAsFolders(library, folderId);
     if (message) alert(message);
   };
 

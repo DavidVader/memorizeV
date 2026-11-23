@@ -3,7 +3,8 @@ import { exportTextFile, nameWithoutExtension, pickTextFiles, readText } from '.
 
 const FORMAT_HINT = 'Format: eine Karte pro Zeile, "Frage;Antwort" oder "Frage<Tab>Antwort".';
 
-export async function importFilesAsFolders(library) {
+// Jede Datei wird zu einem Ordner mit dem Dateinamen (auf oberster Ebene oder als Unterordner von parentId).
+export async function importFilesAsFolders(library, parentId = null) {
   const files = await pickTextFiles();
   const report = [];
   for (const file of files) {
@@ -12,19 +13,8 @@ export async function importFilesAsFolders(library) {
       report.push(`${file.name}: keine Karten gefunden`);
       continue;
     }
-    const folder = library.addFolder({ name: nameWithoutExtension(file) });
+    const folder = library.addFolder({ name: nameWithoutExtension(file), parentId });
     library.addCards(folder.id, cards);
-    report.push(`${file.name}: ${cards.length} Karten`);
-  }
-  return summarize(report);
-}
-
-export async function importFilesIntoFolder(library, folderId) {
-  const files = await pickTextFiles();
-  const report = [];
-  for (const file of files) {
-    const cards = parseCards(await readText(file));
-    library.addCards(folderId, cards);
     report.push(`${file.name}: ${cards.length} Karten`);
   }
   return summarize(report);
