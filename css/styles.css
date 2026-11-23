@@ -604,6 +604,63 @@ button:disabled {
   flex: 1;
 }
 
+/* ---------- Sleep learning ---------- */
+
+.sleep {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: calc(24px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom));
+  background: #000000;
+  color: #6c6c70;
+}
+
+.sleep-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.sleep-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.sleep-card p {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: manual;
+  white-space: pre-wrap;
+}
+
+.sleep-question {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.sleep-answer {
+  font-size: 22px;
+}
+
+.sleep-stop {
+  width: 100%;
+  max-width: 320px;
+  min-height: 56px;
+  background: #1c1c1e;
+}
+
 /* ---------- Study setup ---------- */
 
 .setup-section h2 {
@@ -652,6 +709,10 @@ button:disabled {
 .start-button {
   width: 100%;
   margin-top: 24px;
+}
+
+.start-button + .start-button {
+  margin-top: 12px;
 }
 
 /* ---------- Quick study, marks ---------- */

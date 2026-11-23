@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v10';
+const CACHE_NAME = 'memorizev-v11';
 
 const APP_SHELL = [
   './',
@@ -14,12 +14,16 @@ const APP_SHELL = [
   './js/domain/languages.js',
   './js/domain/library.js',
   './js/domain/palette.js',
+  './js/domain/sleepLearning.js',
   './js/domain/studyOrder.js',
   './js/domain/studyPlan.js',
   './js/domain/studySession.js',
   './js/domain/symbols.js',
+  './js/domain/timing.js',
   './js/ui/studySettingsScreen.js',
+  './js/speech/sleepSession.js',
   './js/speech/speaker.js',
+  './js/speech/wakeLock.js',
   './js/files/cardTextCodec.js',
   './js/files/fileTransfer.js',
   './js/files/transferActions.js',
@@ -41,6 +45,7 @@ const APP_SHELL = [
   './js/ui/overlongWords.js',
   './js/ui/sheet.js',
   './js/ui/studyScreen.js',
+  './js/ui/sleepScreen.js',
   './js/ui/speakButton.js',
   './js/ui/symbolIcon.js',
   './js/ui/symbolIcons.js',

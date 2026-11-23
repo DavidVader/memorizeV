@@ -6,7 +6,7 @@ import { planFromSettings, resolveFolderIds, selectCards } from '../domain/study
 import { saveStudySettings } from '../storage/studySettingsStorage.js';
 import { el } from './dom.js';
 import { folderIcon } from './folderIcon.js';
-import { startStudy } from './studyLauncher.js';
+import { startSleepLearning, startStudy } from './studyLauncher.js';
 
 export function studySettingsScreen(context, route) {
   const { library, go, refresh } = context;
@@ -48,6 +48,11 @@ export function studySettingsScreen(context, route) {
       'button',
       { className: 'primary-button start-button', disabled: availableCount === 0, onclick: () => startStudy(context, route.backTo) },
       `Starten (${availableCount} Karten)`,
+    ),
+    el(
+      'button',
+      { className: 'secondary-button start-button', disabled: availableCount === 0, onclick: () => startSleepLearning(context, route.backTo) },
+      'Schlaflernen starten',
     ),
   );
 }

@@ -6,7 +6,8 @@ import { loadStudySettings } from '../storage/studySettingsStorage.js';
 import { el } from './dom.js';
 import { folderList } from './folderList.js';
 import { openFolderSheet } from './folderSheet.js';
-import { openStudySettings, startStudy } from './studyLauncher.js';
+import { openStudySettings, startSleepLearning, startStudy } from './studyLauncher.js';
+import { uiIcon } from './uiIcons.js';
 
 const HOME = { name: 'folders' };
 
@@ -43,6 +44,7 @@ function studyBar(context) {
       { className: 'toolbar' },
       el('button', { className: 'primary-button', onclick: () => startStudy(context, HOME) }, 'Lernen'),
       el('button', { className: 'secondary-button settings-button', ariaLabel: 'Lern-Einstellungen', onclick: () => openStudySettings(context, HOME) }, '⚙︎'),
+      el('button', { className: 'secondary-button settings-button', ariaLabel: 'Schlaflernen', onclick: () => startSleepLearning(context, HOME) }, uiIcon('moon')),
     ),
     el('p', { className: 'study-summary' }, studySummary(context.library)),
   );

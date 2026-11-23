@@ -9,6 +9,7 @@ Einfache, kostenlose Vokabel-Karten-App (PWA) für das iPhone, optimiert für da
 - Farben für Ordner und Karten (Karte ohne eigene Farbe übernimmt die Ordnerfarbe); Hauptordner haben einen vollen Farbpunkt, Unterordner nur den Rand
 - Beim Erstellen bekommt jede Karte zufällig 0 bis 3 Hintergrund-Symbole (Position und Größe zufällig, danach fest)
 - Vorlesen: Lautsprecher-Button bei Frage und Antwort (Sprache pro Frage/Antwort in den Lern-Einstellungen, nutzt die Sprachausgabe des Geräts)
+- Schlaflernen (Mond-Button): liest die Frage vor, wartet doppelt so lange, liest die Antwort vor, wartet 2 Sekunden und macht endlos mit der nächsten Karte weiter, bis man auf Stoppen tippt. Der Bildschirm bleibt dabei an, wenn das Gerät es erlaubt
 - Lernmodus: Karte aufdecken, "Gewusst" / "Nochmal"
 - Import und Export von `.txt` Dateien (Dateien-App)
 

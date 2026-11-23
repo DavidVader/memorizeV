@@ -1,6 +1,7 @@
 import { folderScreen } from './folderScreen.js';
 import { foldersScreen } from './foldersScreen.js';
 import { hyphenateOverlongWords } from './overlongWords.js';
+import { sleepScreen } from './sleepScreen.js';
 import { studyScreen } from './studyScreen.js';
 import { studySettingsScreen } from './studySettingsScreen.js';
 
@@ -30,6 +31,7 @@ export function startApp(root, library) {
 function buildScreen(context, route) {
   if (route.name === 'folder') return folderScreen(context, route.folderId);
   if (route.name === 'studySettings') return studySettingsScreen(context, route);
+  if (route.name === 'sleep') return sleepScreen(context, route);
   if (route.name === 'study') return studyScreen(context, route);
   return foldersScreen(context);
 }
