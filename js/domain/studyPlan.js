@@ -1,8 +1,15 @@
+import { DEFAULT_ANSWER_LANGUAGE, DEFAULT_QUESTION_LANGUAGE } from './languages.js';
 import { DEFAULT_ORDER_ID, orderCards, pickRandom } from './studyOrder.js';
 import { StudySession } from './studySession.js';
 
 export function defaultSettings() {
-  return { folderIds: null, limitText: '', orderId: DEFAULT_ORDER_ID };
+  return {
+    folderIds: null,
+    limitText: '',
+    orderId: DEFAULT_ORDER_ID,
+    questionLanguage: DEFAULT_QUESTION_LANGUAGE,
+    answerLanguage: DEFAULT_ANSWER_LANGUAGE,
+  };
 }
 
 export function planFromSettings(library, settings, overrides = {}) {

@@ -1,3 +1,4 @@
+import { LANGUAGES } from '../domain/languages.js';
 import { MARKED_FOLDER_ID } from '../domain/library.js';
 import { hexOf } from '../domain/palette.js';
 import { STUDY_ORDERS } from '../domain/studyOrder.js';
@@ -42,6 +43,7 @@ export function studySettingsScreen(context, route) {
     section('Ordner', folderChoices(library, selectedIds, toggleFolder)),
     section('Anzahl Karten', limitInput(settings, change)),
     section('Reihenfolge', orderChoices(settings, change)),
+    section('Sprache beim Vorlesen', languageChoices(settings, change)),
     el(
       'button',
       { className: 'primary-button start-button', disabled: availableCount === 0, onclick: () => startStudy(context, route.backTo) },
@@ -110,4 +112,28 @@ function selectableFolders(library) {
 
 function depthOf(library, folder) {
   return folder.isVirtual ? 0 : library.depthOf(folder.id);
+}
+
+function languageChoices(settings, change) {
+  return el(
+    'div',
+    { className: 'language-choices' },
+    languageSelect('Frage', settings.questionLanguage, (code) => change({ questionLanguage: code })),
+    languageSelect('Antwort', settings.answerLanguage, (code) => change({ answerLanguage: code })),
+  );
+}
+
+function languageSelect(label, selectedCode, onSelect) {
+  return el(
+    'label',
+    { className: 'language-select' },
+    label,
+    el(
+      'select',
+      { className: 'text-field', onchange: (event) => onSelect(event.target.value) },
+      LANGUAGES.map((language) =>
+        el('option', { value: language.code, selected: language.code === selectedCode }, language.name),
+      ),
+    ),
+  );
 }

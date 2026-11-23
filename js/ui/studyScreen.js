@@ -1,7 +1,9 @@
 import { hexOf } from '../domain/palette.js';
 import { createStudySession } from '../domain/studyPlan.js';
+import { loadStudySettings } from '../storage/studySettingsStorage.js';
 import { el } from './dom.js';
 import { markButton } from './markButton.js';
+import { speakButton } from './speakButton.js';
 import { symbolIcon } from './symbolIcon.js';
 
 export function studyScreen(context, route) {
@@ -36,7 +38,7 @@ export function studyScreen(context, route) {
     'main',
     { className: 'screen study', vars: { '--accent': hexOf(library.colorIdOfCard(card)) } },
     header(markButton(library, card)),
-    flashcard(card, session.isAnswerRevealed, reveal),
+    flashcard(card, session.isAnswerRevealed, reveal, loadStudySettings()),
     session.isAnswerRevealed &&
       el(
         'div',
@@ -47,7 +49,7 @@ export function studyScreen(context, route) {
   );
 }
 
-function flashcard(card, isAnswerRevealed, reveal) {
+function flashcard(card, isAnswerRevealed, reveal, { questionLanguage, answerLanguage }) {
   return el(
     'div',
     { className: 'flashcard', role: 'button', tabIndex: 0, onclick: reveal },
@@ -55,14 +57,20 @@ function flashcard(card, isAnswerRevealed, reveal) {
     el(
       'div',
       { className: 'flashcard-content' },
-      el('p', { className: 'flashcard-question', 'data-hyphenate-overlong': '' }, card.question),
+      spokenLine('flashcard-question', card.question, questionLanguage),
       isAnswerRevealed
-        ? [
-            el('hr', { className: 'flashcard-divider' }),
-            el('p', { className: 'flashcard-answer', 'data-hyphenate-overlong': '' }, card.answer),
-          ]
+        ? [el('hr', { className: 'flashcard-divider' }), spokenLine('flashcard-answer', card.answer, answerLanguage)]
         : el('p', { className: 'flashcard-hint' }, 'Tippen zum Aufdecken'),
     ),
+  );
+}
+
+function spokenLine(className, text, language) {
+  return el(
+    'div',
+    { className: 'flashcard-line' },
+    el('p', { className, 'data-hyphenate-overlong': '' }, text),
+    speakButton(text, language),
   );
 }
 

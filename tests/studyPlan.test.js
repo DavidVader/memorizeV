@@ -65,3 +65,9 @@ test('overrides narrow the plan and unknown folders are dropped', () => {
   assert.deepEqual(plan.folderIds, [first.id]);
   assert.deepEqual(planFromSettings(library, { folderIds: ['gone'], limitText: '', orderId: 'random' }).folderIds, []);
 });
+
+test('default settings read questions in German and answers in English', () => {
+  const settings = defaultSettings();
+  assert.equal(settings.questionLanguage, 'de-DE');
+  assert.equal(settings.answerLanguage, 'en-US');
+});

@@ -543,6 +543,67 @@ button:disabled {
   min-height: 52px;
 }
 
+/* ---------- Speech ---------- */
+
+.ui-icon {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+}
+
+.ui-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.flashcard-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.flashcard-line p {
+  min-width: 0;
+}
+
+.speak-button {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: 50%;
+  color: var(--accent);
+}
+
+.speak-button:active {
+  background: var(--separator);
+}
+
+.language-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.language-select {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.language-select .text-field {
+  flex: 1;
+}
+
 /* ---------- Study setup ---------- */
 
 .setup-section h2 {
