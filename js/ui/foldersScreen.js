@@ -1,10 +1,10 @@
-import { hexOf } from '../domain/palette.js';
+import { MARKED_FOLDER_ID } from '../domain/library.js';
 import { STUDY_ORDERS } from '../domain/studyOrder.js';
 import { planFromSettings, selectCards } from '../domain/studyPlan.js';
 import { importFilesAsFolders } from '../files/transferActions.js';
 import { loadStudySettings } from '../storage/studySettingsStorage.js';
 import { el } from './dom.js';
-import { folderIcon } from './folderIcon.js';
+import { folderList } from './folderList.js';
 import { openFolderSheet } from './folderSheet.js';
 import { openStudySettings, startStudy } from './studyLauncher.js';
 
@@ -12,6 +12,8 @@ const HOME = { name: 'folders' };
 
 export function foldersScreen(context) {
   const { library } = context;
+  const rootFolders = library.childFolders(null);
+  const markedFolder = library.folder(MARKED_FOLDER_ID);
 
   const importFolders = async () => {
     const message = await importFilesAsFolders(library);
@@ -28,7 +30,7 @@ export function foldersScreen(context) {
       el('button', { className: 'icon-button', ariaLabel: 'Import', onclick: importFolders }, '⬆︎'),
       el('button', { className: 'icon-button', ariaLabel: 'Neuer Ordner', onclick: () => openFolderSheet(context) }, '+'),
     ),
-    library.folders.length === 0 ? emptyState() : [studyBar(context), folderList(context)],
+    rootFolders.length === 0 ? emptyState() : [studyBar(context), folderList(library, [markedFolder, ...rootFolders], context.go)],
   );
 }
 
@@ -50,31 +52,6 @@ function studySummary(library) {
   const plan = planFromSettings(library, loadStudySettings());
   const orderName = STUDY_ORDERS.find((order) => order.id === plan.orderId).name;
   return `${selectCards(library, plan).length} Karten · ${orderName}`;
-}
-
-function folderList({ library, go }) {
-  return el(
-    'ul',
-    { className: 'list' },
-    library.foldersWithMarked.map((folder) =>
-      el(
-        'li',
-        {},
-        el(
-          'button',
-          {
-            className: 'row',
-            vars: { '--accent': hexOf(folder.colorId) },
-            onclick: () => go({ name: 'folder', folderId: folder.id }),
-          },
-          folderIcon(folder),
-          el('span', { className: 'row-title' }, folder.name),
-          el('span', { className: 'row-detail' }, String(library.cardsIn(folder.id).length)),
-          el('span', { className: 'chevron' }, '›'),
-        ),
-      ),
-    ),
-  );
 }
 
 function emptyState() {

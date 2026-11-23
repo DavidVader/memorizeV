@@ -1,3 +1,4 @@
+import { MARKED_FOLDER_ID } from '../domain/library.js';
 import { hexOf } from '../domain/palette.js';
 import { STUDY_ORDERS } from '../domain/studyOrder.js';
 import { planFromSettings, resolveFolderIds, selectCards } from '../domain/studyPlan.js';
@@ -57,13 +58,13 @@ function folderChoices(library, selectedIds, toggleFolder) {
   return el(
     'ul',
     { className: 'list' },
-    library.foldersWithMarked.map((folder) =>
+    selectableFolders(library).map((folder) =>
       el(
         'li',
         {},
         el(
           'button',
-          { className: 'row', vars: { '--accent': hexOf(folder.colorId) }, onclick: () => toggleFolder(folder.id) },
+          { className: 'row', vars: { '--accent': hexOf(folder.colorId), '--depth': depthOf(library, folder) }, onclick: () => toggleFolder(folder.id) },
           folderIcon(folder),
           el('span', { className: 'row-title' }, folder.name),
           el('span', { className: 'row-detail' }, String(library.cardsIn(folder.id).length)),
@@ -101,4 +102,12 @@ function orderChoices(settings, change) {
       ),
     ),
   );
+}
+
+function selectableFolders(library) {
+  return [library.folder(MARKED_FOLDER_ID), ...library.foldersInTreeOrder()];
+}
+
+function depthOf(library, folder) {
+  return folder.isVirtual ? 0 : library.depthOf(folder.id);
 }

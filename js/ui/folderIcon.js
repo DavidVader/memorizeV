@@ -1,5 +1,7 @@
 import { el } from './dom.js';
 
 export function folderIcon(folder) {
-  return folder.isVirtual ? el('span', { className: 'star-icon' }, '★') : el('span', { className: 'dot' });
+  if (folder.isVirtual) return el('span', { className: 'star-icon' }, '★');
+  const isSubfolder = Boolean(folder.parentId);
+  return el('span', { className: `dot${isSubfolder ? ' ring' : ''}` });
 }

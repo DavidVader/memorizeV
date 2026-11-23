@@ -4,8 +4,8 @@ Einfache, kostenlose Vokabel-Karten-App (PWA) für das iPhone, optimiert für da
 
 ## Funktionen
 - Karten mit Frage und Antwort erstellen, bearbeiten, löschen
-- Ordner erstellen, umbenennen, löschen
-- Farben für Ordner und Karten (Karte ohne eigene Farbe übernimmt die Ordnerfarbe)
+- Ordner erstellen, umbenennen, löschen; Ordner können beliebig tief verschachtelt werden (Unterordner)
+- Farben für Ordner und Karten (Karte ohne eigene Farbe übernimmt die Ordnerfarbe); Hauptordner haben einen vollen Farbpunkt, Unterordner nur den Rand
 - Lernmodus: Karte aufdecken, "Gewusst" / "Nochmal"
 - Import und Export von `.txt` Dateien (Dateien-App)
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'memorizev-v5';
+const CACHE_NAME = 'memorizev-v6';
 
 const APP_SHELL = [
   './',
@@ -21,6 +21,7 @@ const APP_SHELL = [
   './js/files/transferActions.js',
   './js/storage/libraryStorage.js',
   './js/storage/studySettingsStorage.js',
+  './js/ui/addItemSheet.js',
   './js/ui/app.js',
   './js/ui/cardSheet.js',
   './js/ui/colorPicker.js',
@@ -28,6 +29,8 @@ const APP_SHELL = [
   './js/ui/folderScreen.js',
   './js/ui/folderSheet.js',
   './js/ui/folderIcon.js',
+  './js/ui/folderList.js',
+  './js/ui/routes.js',
   './js/ui/foldersScreen.js',
   './js/ui/studyLauncher.js',
   './js/ui/markButton.js',

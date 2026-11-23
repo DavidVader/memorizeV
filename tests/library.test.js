@@ -89,3 +89,36 @@ test('editing a card keeps its mark, and a card is never studied twice', () => {
   assert.equal(library.cardsIn('marked').length, 1);
   assert.equal(library.cardsInFolders([folder.id, 'marked']).length, 1);
 });
+
+test('folders can be nested and report their depth', () => {
+  const child = library.addFolder({ name: 'Verben', parentId: folder.id });
+  const grandchild = library.addFolder({ name: 'Unregelmäßig', parentId: child.id });
+  assert.deepEqual(library.childFolders(folder.id).map((entry) => entry.id), [child.id]);
+  assert.deepEqual(library.childFolders(null).map((entry) => entry.id), [folder.id]);
+  assert.deepEqual([library.depthOf(folder.id), library.depthOf(child.id), library.depthOf(grandchild.id)], [0, 1, 2]);
+});
+
+test('lists folders depth first', () => {
+  const other = library.addFolder({ name: 'Mathe' });
+  const child = library.addFolder({ name: 'Verben', parentId: folder.id });
+  assert.deepEqual(library.foldersInTreeOrder().map((entry) => entry.id), [folder.id, child.id, other.id]);
+});
+
+test('a folder cannot be created inside an unknown folder', () => {
+  assert.throws(() => library.addFolder({ name: 'x', parentId: 'missing' }));
+});
+
+test('removing a folder removes its subfolders and their cards', () => {
+  const child = library.addFolder({ name: 'Verben', parentId: folder.id });
+  library.addCard(child.id, { question: 'gehen', answer: 'go' });
+  library.removeFolder(folder.id);
+  assert.deepEqual(library.snapshot(), { folders: [], cards: [] });
+});
+
+test('cardsInTree includes the cards of all subfolders', () => {
+  const child = library.addFolder({ name: 'Verben', parentId: folder.id });
+  library.addCard(folder.id, { question: 'Hund', answer: 'dog' });
+  library.addCard(child.id, { question: 'gehen', answer: 'go' });
+  assert.equal(library.cardsInTree(folder.id).length, 2);
+  assert.equal(library.cardsInTree(child.id).length, 1);
+});

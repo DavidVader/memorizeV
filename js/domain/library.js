@@ -48,6 +48,29 @@ export class Library {
     return this.#cards.filter((card) => card.folderId === folderId);
   }
 
+  childFolders(parentId) {
+    return this.#folders.filter((folder) => (folder.parentId ?? null) === parentId);
+  }
+
+  foldersInTreeOrder(parentId = null) {
+    return this.childFolders(parentId).flatMap((folder) => [folder, ...this.foldersInTreeOrder(folder.id)]);
+  }
+
+  folderAndDescendantIds(folderId) {
+    const childIds = this.childFolders(folderId).flatMap((child) => this.folderAndDescendantIds(child.id));
+    return [folderId, ...childIds];
+  }
+
+  cardsInTree(folderId) {
+    if (folderId === MARKED_FOLDER_ID) return this.cardsIn(folderId);
+    return this.folderAndDescendantIds(folderId).flatMap((id) => this.cardsIn(id));
+  }
+
+  depthOf(folderId) {
+    const folder = this.#requireFolder(folderId);
+    return folder.parentId ? 1 + this.depthOf(folder.parentId) : 0;
+  }
+
   cardsInFolders(folderIds) {
     const cards = this.foldersWithMarked
       .filter((folder) => folderIds.includes(folder.id))
@@ -55,8 +78,9 @@ export class Library {
     return [...new Set(cards)];
   }
 
-  addFolder({ name, colorId = DEFAULT_COLOR_ID }) {
-    const folder = { id: newId(), name: name.trim(), colorId };
+  addFolder({ name, colorId = DEFAULT_COLOR_ID, parentId = null }) {
+    if (parentId !== null) this.#requireFolder(parentId);
+    const folder = { id: newId(), name: name.trim(), colorId, parentId };
     this.#folders.push(folder);
     this.#changed();
     return folder;
@@ -70,8 +94,9 @@ export class Library {
   }
 
   removeFolder(folderId) {
-    this.#folders = this.#folders.filter((folder) => folder.id !== folderId);
-    this.#cards = this.#cards.filter((card) => card.folderId !== folderId);
+    const removedIds = this.folderAndDescendantIds(folderId);
+    this.#folders = this.#folders.filter((folder) => !removedIds.includes(folder.id));
+    this.#cards = this.#cards.filter((card) => !removedIds.includes(card.folderId));
     this.#changed();
   }
 
